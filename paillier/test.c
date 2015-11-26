@@ -5,8 +5,10 @@
 
 
 void paillier_get_rand(void* buf, int len) {
-    for (int i = 0; i < len; i++) {
-        buf[i] = rand() % 256;
+    unsigned char *c = (unsigned char *) buf;
+    int i;
+    for (i = 0; i < len; i++) {
+        c[i] = rand() % 256;
     }
 }
 
