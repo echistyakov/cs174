@@ -16,13 +16,16 @@ void paillier_get_rand(void* buf, int len) {
 int main(int argc, char* argv[]) {
     // Generate key set
     const int modulobits = 128;
+    const num1 = 4973;
+    const num2 = 2879;
+    
     paillier_pubkey_t* pub;
     paillier_prvkey_t* prv;
-    paillier_keygen(128, &pub, &prv, paillier_get_rand);
+    paillier_keygen(modulobits, &pub, &prv, paillier_get_rand);
     
     // Create plaintexts
-    paillier_plaintext_t *pt1 = paillier_plaintext_from_ui(4973);
-    paillier_plaintext_t *pt2 = paillier_plaintext_from_ui(2879);
+    paillier_plaintext_t *pt1 = paillier_plaintext_from_ui(num1);
+    paillier_plaintext_t *pt2 = paillier_plaintext_from_ui(num2);
     printf("pt1 = %d\n", mpz_get_ui(pt1->m));
     printf("pt2 = %d\n", mpz_get_ui(pt2->m));
 
@@ -47,7 +50,7 @@ int main(int argc, char* argv[]) {
     paillier_plaintext_t *added = paillier_dec(NULL, pub, prv, mul);
     printf("mul: %s\n", mpz_get_str(NULL, 16, added->m));
     
-    printf("4973 + 2879 = %d\n", mpz_get_ui(added->m));
-    
+    printf("%d + %d = %d (should be: %d)\n", num1, num2, mpz_get_ui(added->m), num1 + num2);
+
     return 0;
 }
