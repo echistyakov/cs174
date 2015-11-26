@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <gmp.h>
-#include "paillier.h"
+#include <paillier.h>
 
 
 int main(int argc, char* argv[]) {
     // Generate key set
     const int modulobits = 128;
     paillier_pubkey_t* pub;
-	paillier_prvkey_t* prv;
+    paillier_prvkey_t* prv;
     paillier_keygen(128, &pub, &prv, paillier_get_rand_devrandom);
     
     // Create plaintexts
@@ -16,20 +16,27 @@ int main(int argc, char* argv[]) {
     paillier_plaintext_t *pt2 = paillier_plaintext_from_ui(2879);
     printf("pt1 = %d\n", mpz_get_ui(pt1->m));
     printf("pt2 = %d\n", mpz_get_ui(pt2->m));
+
     // Encrypt plaintexts
-    paillier_ciphertext_t *ct1 = paillier_enc(NULL, pub, pt1, paillier_get_rand_devrandom);
-    paillier_ciphertext_t *ct2 = paillier_enc(NULL, pub, pt1, paillier_get_rand_devrandom);
-    printf("test4\n");
+    paillier_ciphertext_t *ct1 = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
+    mpz_init(ct1->c);
+    paillier_enc(ct1, pub, pt1, paillier_get_rand_devrandom);
+    paillier_ciphertext_t *ct2 = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
+    mpz_init(ct2->c);
+    paillier_enc(ct2, pub, pt2, paillier_get_rand_devrandom);
+    printf("ct1: %s\n", mpz_get_str(NULL, 16, ct1->c));
+    printf("ct2: %s\n", mpz_get_str(NULL, 16, ct2->c));
     
     // Multiply
     paillier_ciphertext_t *mul = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
+    mpz_init(mul->c);
     paillier_mul(pub, mul, ct1, ct2);
-    printf("test5\n");
+
+    printf("mul: %s\n", mpz_get_str(NULL, 16, mul->c));
     
     // Decrypt
     paillier_plaintext_t *added = paillier_dec(NULL, pub, prv, mul);
-    printf("test6\n");
-    printf("test7\n");
+    printf("mul: %s\n", mpz_get_str(NULL, 16, added->m));
     
     printf("4973 + 2879 = %d\n", mpz_get_ui(added->m));
     
