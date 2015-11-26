@@ -4,12 +4,19 @@
 #include <paillier.h>
 
 
+void paillier_get_rand(void* buf, int len) {
+    for (int i = 0; i < len; i++) {
+        buf[i] = rand() % 256;
+    }
+}
+
+
 int main(int argc, char* argv[]) {
     // Generate key set
     const int modulobits = 128;
     paillier_pubkey_t* pub;
     paillier_prvkey_t* prv;
-    paillier_keygen(128, &pub, &prv, paillier_get_rand_devrandom);
+    paillier_keygen(128, &pub, &prv, paillier_get_rand);
     
     // Create plaintexts
     paillier_plaintext_t *pt1 = paillier_plaintext_from_ui(4973);
@@ -20,10 +27,10 @@ int main(int argc, char* argv[]) {
     // Encrypt plaintexts
     paillier_ciphertext_t *ct1 = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
     mpz_init(ct1->c);
-    paillier_enc(ct1, pub, pt1, paillier_get_rand_devrandom);
+    paillier_enc(ct1, pub, pt1, paillier_get_rand);
     paillier_ciphertext_t *ct2 = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
     mpz_init(ct2->c);
-    paillier_enc(ct2, pub, pt2, paillier_get_rand_devrandom);
+    paillier_enc(ct2, pub, pt2, paillier_get_rand);
     printf("ct1: %s\n", mpz_get_str(NULL, 16, ct1->c));
     printf("ct2: %s\n", mpz_get_str(NULL, 16, ct2->c));
     
