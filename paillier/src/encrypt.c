@@ -29,9 +29,9 @@ int main(int argc, char* argv[]) {
     printf("%s", mpz_get_str(NULL, 16, ct->c));
     
     // Clean up
-    paillier_pubkey_free(pub);
-    paillier_plaintext_free(pt);
-    paillier_ciphertext_free(ct);
+    paillier_freepubkey(pub);
+    paillier_freeplaintext(pt);
+    paillier_freeciphertext(ct);
 
     return 0;
 }

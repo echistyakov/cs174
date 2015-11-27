@@ -33,10 +33,10 @@ int main(int argc, char* argv[]) {
     printf("%d", mpz_get_ui(pt->m));
     
     // Clean up
-    paillier_pubkey_free(pub);
-    paillier_prvkey_free(prv);
-    paillier_plaintext_free(pt);
-    paillier_ciphertext_free(ct);
+    paillier_freepubkey(pub);
+    paillier_freeprvkey(prv);
+    paillier_freeplaintext(pt);
+    paillier_freeciphertext(ct);
 
     return 0;
 }

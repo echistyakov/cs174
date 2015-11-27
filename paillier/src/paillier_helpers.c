@@ -12,36 +12,6 @@ void paillier_get_rand(void* buf, int len) {
     }
 }
 
-void paillier_pubkey_free(paillier_pubkey_t *pub) {
-    if (pub) {
-        mpz_clear(pub->n);
-        mpz_clear(pub->n_squared);
-        mpz_clear(pub->n_plusone);
-        free(pub);
-    }
-}
-
-void paillier_prvkey_free(paillier_prvkey_t *prv) {
-    if (prv) {
-        mpz_clear(prv->lambda);
-        mpz_clear(prv->x);
-        free(prv);
-    }
-}
-
-void paillier_plaintext_free(paillier_plaintext_t *pt) {
-    if (pt) {
-        mpz_clear(pt->m);
-        free(pt);
-    }
-}
-
-void paillier_ciphertext_free(paillier_ciphertext_t *ct) {
-    if (ct) {
-        mpz_clear(ct->c);
-        free(ct);
-    }
-}
 
 paillier_ciphertext_t *paillier_ciphertext_zero(paillier_pubkey_t *pub) {
     paillier_plaintext_t *pt = paillier_plaintext_from_ui(0);

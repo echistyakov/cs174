@@ -37,8 +37,8 @@ int main(int argc, char* argv[]) {
     free(pub_hex);
     free(prv_hex);
     
-    paillier_pubkey_free(pub);
-    paillier_prvkey_free(prv);
+    paillier_freepubkey(pub);
+    paillier_freeprvkey(prv);
 
     return 0;
 }

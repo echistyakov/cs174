@@ -81,8 +81,8 @@ void sum_he_t_init(sum_he_t *sh) {
 }
 
 void sum_he_t_free(sum_he_t *sh) {
-    paillier_pubkey_free(sh->pub);
-    paillier_ciphertext_free(sh->sum);
+    paillier_freepubkey(sh->pub);
+    paillier_freeciphertext(sh->sum);
     free(sh);
 }
 
@@ -119,7 +119,7 @@ void sum_he_clear(UDF_INIT *initid, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
     
     // Set sum to 0
-    paillier_ciphertext_free(sh->sum);
+    paillier_freeciphertext(sh->sum);
     sh->sum = paillier_ciphertext_zero(sh->pub);
 }
 
@@ -135,9 +135,9 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     paillier_ciphertext_t *mul = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
     mpz_init(mul->c);
     paillier_mul(sh->pub, mul, ct, sh->sum);
-    paillier_ciphertext_free(sh->sum);
+    paillier_freeciphertext(sh->sum);
     sh->sum = mul;
-    paillier_ciphertext_free(ct);
+    paillier_freeciphertext(ct);
 }
 
 void sum_he_reset(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
