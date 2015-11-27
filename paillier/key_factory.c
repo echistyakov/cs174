@@ -9,6 +9,7 @@ const int MODULO_BITS = 128;
 void paillier_get_rand(void* buf, int len) {
     unsigned char *c = (unsigned char *) buf;
     int i;
+    srand(time(NULL));  // Seed rand
     for (i = 0; i < len; i++) {
         c[i] = rand() % 256;
     }
