@@ -15,3 +15,9 @@
     IMPORTANT: libpaillier-0.8 is not PIC-ready out-of-the-box.
     In order to make it compatible with shared libraries, redo step 2 but after running "./configure",
     manually add "-fPIC" flag to CFLAGS in the generated Makefile.
+
+5. Copy shared library to MySQL plugins folder:
+    cp sum_he.so /usr/lib/mysql/plugin (may require sudo mode)
+
+6. Register SUM_HE with MySQL:
+    CREATE AGGREGATE FUNCTION sum_he RETURNS STRING SONAME 'sum_he.so';

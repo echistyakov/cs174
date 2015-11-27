@@ -6,6 +6,6 @@ USE project;
 CREATE TABLE Employees(
   id INTEGER(10),
   age INTEGER(10),
-  salary BLOB NOT NULL,
+  salary TEXT NOT NULL,
   PRIMARY KEY(id)
 );
