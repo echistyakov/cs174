@@ -12,6 +12,6 @@
     Provided Makefile already takes care of this.
 
 4. Compiling SUM_HE shared lirary:
-    IMPORTANT: libpaillier is not PIC-ready out-of-the-box.
+    IMPORTANT: libpaillier-0.8 is not PIC-ready out-of-the-box.
     In order to make it compatible with shared libraries, redo step 2 but after running "./configure",
-    manually add "-fPIC" flag into the generated Makefile.
+    manually add "-fPIC" flag to CFLAGS in the generated Makefile.

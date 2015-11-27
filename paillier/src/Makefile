@@ -1,7 +1,7 @@
 CC		= gcc
 CXX		= g++
-FLAGS   = -lgmp -lpaillier
-TARGETS = key_factory encrypt decrypt
+FLAGS   = -lgmp -lpaillier -w
+TARGETS = key_factory encrypt decrypt sum_he.so
 
 all: $(TARGETS)
 
@@ -9,8 +9,7 @@ all: $(TARGETS)
 	$(CC) paillier_helpers.c $< -o $@ $(FLAGS)
 
 sum_he.so: sum_he.c
-	$(CC) paillier_helpers.c $< -o $@ $(FLAGS) -shared
-
+	$(CC) paillier_helpers.c $< -o $@ $(FLAGS) -shared -fPIC -I/usr/incldue/mysql
 
 clean:
 	rm -f $(foreach v, $(TARGETS), $(v).o) $(foreach v, $(TARGETS), $(v))
