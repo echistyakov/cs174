@@ -59,7 +59,8 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error);
 // PUBLIC KEY //
 ////////////////
 
-const char *PUB_HEX = "ffffffffffffffff";
+// TODO: should be placed in a separate file
+const char *PUB_HEX = "2180d9c9587bacf003394ca9a235e43c";
 
 /////////////
 // HELPERS //
