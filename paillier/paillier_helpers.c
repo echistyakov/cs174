@@ -1,3 +1,4 @@
+#include <gmp.h>
 #include <paillier.h>
 #include "paillier_helpers.h"
 
