@@ -21,3 +21,6 @@
 
 6. Register SUM_HE with MySQL:
     CREATE AGGREGATE FUNCTION sum_he RETURNS STRING SONAME 'sum_he.so';
+   
+  *To drop:
+    DROP FUNCTION sum_he;

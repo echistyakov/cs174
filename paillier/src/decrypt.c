@@ -11,7 +11,8 @@ int main(int argc, char* argv[]) {
     // [2] prv
     // [3] data (hex)
     if (argc != 4) {
-        printf("Usage: %s <pub> <prv> <data(hex)>", argv[0]);
+        printf("Usage: %s <pub> <prv> <data(hex)>\n", argv[0]);
+        return 1;
     }
 
     paillier_prvkey_t* prv;

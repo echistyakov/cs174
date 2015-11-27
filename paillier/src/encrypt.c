@@ -10,7 +10,8 @@ int main(int argc, char* argv[]) {
     // [1] pub
     // [2] data (int)
     if (argc != 3) {
-        printf("Usage: %s <pub> <data(int)>", argv[0]);
+        printf("Usage: %s <pub> <data(int)>\n", argv[0]);
+        return 1;
     }
 
     paillier_pubkey_t* pub;
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]) {
     
     // Read in key and data
     pub = paillier_pubkey_from_hex(argv[1]);
-    pt = paillier_plaintext_from_ui(atoi(argv[3]));
+    pt = paillier_plaintext_from_ui(atoi(argv[2]));
 
     // Encrypt
     ct = paillier_enc(NULL, pub, pt, paillier_get_rand);

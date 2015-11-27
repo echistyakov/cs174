@@ -123,6 +123,7 @@ void sum_he_clear(UDF_INIT *initid, char *is_null, char *error) {
 }
 
 void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
+    // TODO: handle NULLs
     sum_he_t *sh = (sum_he_t *) initid->ptr;
     
     // Convert arg to ciphertext
