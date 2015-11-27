@@ -46,7 +46,7 @@ static pthread_mutex_t LOCK_hostname;
 ////////////////
 
 // Main function
-char* sum_he(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error);
+char* sum_he(UDF_INIT *initid, UDF_ARGS *args, char *result, unsigned long *length, char *is_null, char *error);
 // Init/deinit
 my_bool sum_he_init(UDF_INIT *initid, UDF_ARGS *args, char *message);
 void sum_he_deinit(UDF_INIT *initid);
@@ -145,9 +145,12 @@ void sum_he_reset(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) 
     sum_he_add(initid, args, is_null, error);
 }
 
-char* sum_he(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
+char* sum_he(UDF_INIT *initid, UDF_ARGS *args, char *result, unsigned long *length, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
-    return mpz_get_str(NULL, 16, sh->sum->c);
+    char *hex_result = mpz_get_str(NULL, 16, sh->sum->c);
+    strcpy(result, hex_result);
+    *length = strlen(hex_result);
+    return result;
 }
 
 //////////////////////////////////////////////////////////////////
