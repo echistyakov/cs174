@@ -1,0 +1,17 @@
+1. To extract the libraries:
+    tar xzfv libpaillier-0.8.tar.gz
+    tar xzfj gmp-6.1.0.tar.bz2
+
+2. To install the libraries:
+    ./configure
+    make
+    make install (may require sudo mode)
+
+3. Compiling "routine" programs:
+    When the libraries are successfully installed, compilation will require the following flags: -lgmp -lpaillier
+    Provided Makefile already takes care of this.
+
+4. Compiling SUM_HE shared lirary:
+    IMPORTANT: libpaillier is not PIC-ready out-of-the-box.
+    In order to make it compatible with shared libraries, redo step 2 but after running "./configure",
+    manually add "-fPIC" flag into the generated Makefile.
