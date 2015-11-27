@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <paillier.h>
+#include "paillier_helpers.h"
 
 
 int main(int argc, char* argv[]) {

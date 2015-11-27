@@ -144,7 +144,7 @@ void sum_he_reset(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) 
 
 char* sum_he(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
-    return mpz_get_str(NULL, 16, sh->sum.c);
+    return mpz_get_str(NULL, 16, sh->sum->c);
 }
 
 //////////////////////////////////////////////////////////////////

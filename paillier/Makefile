@@ -5,14 +5,11 @@ TARGETS = key_factory encrypt decrypt
 
 all: $(TARGETS)
 
-%.o: %.c
-	$(CC) $< -o $@ $(FLAGS) -c
+%: %.c
+	$(CC) paillier_helpers.c $< -o $@ $(FLAGS)
 
-%: %.c paillier_helpers.c
-	$(CC) $< -o $@ $(FLAGS)
-
-sum_he.so: sum_he.c paillier_helpers.c
-	$(CC) $< -o $@ $(FLAGS) -shared
+sum_he.so: sum_he.c
+	$(CC) paillier_helpers.c $< -o $@ $(FLAGS) -shared
 
 
 clean:
