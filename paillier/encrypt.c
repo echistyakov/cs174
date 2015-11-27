@@ -4,15 +4,6 @@
 #include <paillier.h>
 
 
-void paillier_get_rand(void* buf, int len) {
-    unsigned char *c = (unsigned char *) buf;
-    int i;
-    for (i = 0; i < len; i++) {
-        c[i] = rand() % 256;
-    }
-}
-
-
 int main(int argc, char* argv[]) {
     // Arguments:
     // [1] pub
@@ -36,16 +27,9 @@ int main(int argc, char* argv[]) {
     printf("%s", mpz_get_str(NULL, 16, ct->c));
     
     // Clean up
-    mpz_clear(pub->n);
-    mpz_clear(pub->n_squared);
-    mpz_clear(pub->n_plusone);
-    free(pub);
-    
-    mpz_clear(pt->m);
-    free(pt);
-    
-    mpz_clear(ct->c);
-    free(ct);
+    paillier_pubkey_free(pub);
+    paillier_plaintext_free(pt);
+    paillier_ciphertext_free(ct);
 
     return 0;
 }

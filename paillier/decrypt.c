@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <paillier.h>
+#include "paillier_helpers.h"
 
 
 int main(int argc, char* argv[]) {
@@ -31,20 +32,10 @@ int main(int argc, char* argv[]) {
     printf("%d", mpz_get_ui(pt->m));
     
     // Clean up
-    mpz_clear(pub->n);
-    mpz_clear(pub->n_squared);
-    mpz_clear(pub->n_plusone);
-    free(pub);
-    
-    mpz_clear(prv->lambda);
-    mpz_clear(prv->x);
-    free(prv);
-    
-    mpz_clear(pt->m);
-    free(pt);
-    
-    mpz_clear(ct->c);
-    free(ct);
+    paillier_pubkey_free(pub);
+    paillier_prvkey_free(prv);
+    paillier_plaintext_free(pt);
+    paillier_ciphertext_free(ct);
 
     return 0;
 }

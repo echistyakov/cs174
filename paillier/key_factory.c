@@ -2,18 +2,9 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <paillier.h>
-
+#include "paillier_helpers.h"
 
 const int MODULO_BITS = 128;
-
-void paillier_get_rand(void* buf, int len) {
-    unsigned char *c = (unsigned char *) buf;
-    int i;
-    srand(time(NULL));  // Seed rand
-    for (i = 0; i < len; i++) {
-        c[i] = rand() % 256;
-    }
-}
 
 
 int main(int argc, char* argv[]) {
@@ -46,14 +37,8 @@ int main(int argc, char* argv[]) {
     free(pub_hex);
     free(prv_hex);
     
-    mpz_clear(pub->n);
-    mpz_clear(pub->n_squared);
-    mpz_clear(pub->n_plusone);
-    free(pub);
-    
-    mpz_clear(prv->lambda);
-    mpz_clear(prv->x);
-    free(prv);
+    paillier_pubkey_free(pub);
+    paillier_prvkey_free(prv);
 
     return 0;
 }

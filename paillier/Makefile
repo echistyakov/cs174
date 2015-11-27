@@ -8,10 +8,10 @@ all: $(TARGETS)
 %.o: %.c
 	$(CC) $< -o $@ $(FLAGS) -c
 
-%: %.c
+%: %.c paillier_helpers.c
 	$(CC) $< -o $@ $(FLAGS)
 
-sum_he.so: sum_he.c
+sum_he.so: sum_he.c paillier_helpers.c
 	$(CC) $< -o $@ $(FLAGS) -shared
 
 
