@@ -11,5 +11,9 @@ all: $(TARGETS)
 %: %.o
 	$(CC) $< $(FLAGS) -o $@
 
+sum_he.so: sum_he.c
+	$(CC) $< $(FLAGS) -shared -o $@
+
+
 clean:
 	rm -f $(foreach v, $(TARGETS), $(v).o) $(foreach v, $(TARGETS), $(v))
