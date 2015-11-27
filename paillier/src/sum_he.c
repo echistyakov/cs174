@@ -67,8 +67,8 @@ const char *PUB_HEX = "ffffffffffffffff";
 
 
 typedef struct {
-	paillier_ciphertext_t *sum;
     paillier_pubkey_t *pub;
+    paillier_ciphertext_t *sum;
 } sum_he_t;
 
 void sum_he_t_init(sum_he_t *sh) {
@@ -76,9 +76,7 @@ void sum_he_t_init(sum_he_t *sh) {
     sh->pub = paillier_pubkey_from_hex(PUB_HEX);
 
     // Set sum to 0
-    paillier_plaintext_t *pt = paillier_plaintext_from_ui(0);
-    sh->sum = paillier_enc(NULL, sh->pub, pt, paillier_get_rand);
-    paillier_plaintext_free(pt);
+    sh->sum = paillier_ciphertext_zero(sh->pub);
 }
 
 void sum_he_t_free(sum_he_t *sh) {
@@ -101,8 +99,9 @@ my_bool sum_he_init(UDF_INIT *initid, UDF_ARGS *args, char *message) {
         return 1;
     }
     
-    initid->ptr = malloc(sizeof(sum_he_t));
-    if (!initid->ptr) {
+    sum_he_t *sh = (sum_he_t *) initid->ptr;
+    sh = (sum_he_t *) malloc(sizeof(sum_he_t));
+    if (!sh) {
         strcpy(message, "Couldn't allocate memory");
         return 1;
     }
@@ -117,8 +116,10 @@ void sum_he_deinit(UDF_INIT *initid) {
 
 void sum_he_clear(UDF_INIT *initid, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
-    sum_he_t_free(sh);
-    sum_he_t_init(sh);
+    
+    // Set sum to 0
+    paillier_ciphertext_free(sh->sum);
+    sh->sum = paillier_ciphertext_zero(sh->pub);
 }
 
 void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
