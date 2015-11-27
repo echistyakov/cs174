@@ -16,6 +16,6 @@ void paillier_get_rand(void* buf, int len) {
 paillier_ciphertext_t *paillier_ciphertext_zero(paillier_pubkey_t *pub) {
     paillier_plaintext_t *pt = paillier_plaintext_from_ui(0);
     paillier_ciphertext_t *ct = paillier_enc(NULL, pub, pt, paillier_get_rand);
-    paillier_plaintext_free(pt);
+    paillier_freeplaintext(pt);
     return ct;
 }
