@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     // Clean up
     mpz_clear(pub->n);
     mpz_clear(pub->n_squared);
-    mpz_clear(pub->n_plus_one);
+    mpz_clear(pub->n_plusone);
     free(pub);
     
     mpz_clear(prv->lambda);

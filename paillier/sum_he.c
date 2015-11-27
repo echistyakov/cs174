@@ -80,7 +80,7 @@ void sum_he_t_deinit(sum_he_t *sh) {
     // Clear pub
     mpz_clear(sh->pub.n);
     mpz_clear(sh->pub.n_squared);
-    mpz_clear(sh->pub.n_plus_one);
+    mpz_clear(sh->pub.n_plusone);
     free(sh->pub);
     
     // Clear sum
