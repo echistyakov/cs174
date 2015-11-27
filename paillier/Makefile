@@ -6,13 +6,13 @@ TARGETS = key_factory encrypt decrypt
 all: $(TARGETS)
 
 %.o: %.c
-	$(CC) $< $(FLAGS) -c -o $@
+	$(CC) $< -o $@ $(FLAGS) -c
 
-%: %.o
-	$(CC) $< $(FLAGS) -o $@
+%: %.c
+	$(CC) $< -o $@ $(FLAGS)
 
 sum_he.so: sum_he.c
-	$(CC) $< $(FLAGS) -shared -o $@
+	$(CC) $< -o $@ $(FLAGS) -shared
 
 
 clean:

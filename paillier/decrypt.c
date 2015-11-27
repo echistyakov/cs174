@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     
     // Read in keys and data
     pub = paillier_pubkey_from_hex(argv[1]);
-    prv = paillier_prvkey_from_hex(argv[2]);
+    prv = paillier_prvkey_from_hex(argv[2], pub);
     ct = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
     mpz_init_set_str(ct->c, argv[3], 16);
 

@@ -41,12 +41,11 @@ int main(int argc, char* argv[]) {
     mpz_clear(pub->n_plusone);
     free(pub);
     
-    mpz_clear(prv->lambda);
-    mpz_clear(prv->x);
-    free(prv);
-    
     mpz_clear(pt->m);
     free(pt);
+    
+    mpz_clear(ct->c);
+    free(ct);
 
     return 0;
 }
