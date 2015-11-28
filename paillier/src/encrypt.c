@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     
     // Read in key and data
     pub = paillier_pubkey_from_hex(argv[1]);
-    pt = paillier_plaintext_from_ui(atoi(argv[2]));
+    pt = paillier_plaintext_from_ui(strtoul(argv[2], NULL, 10));
 
     // Encrypt
     ct = paillier_enc(NULL, pub, pt, paillier_get_rand);

@@ -16,8 +16,8 @@ void paillier_get_rand(void* buf, int len) {
 int main(int argc, char* argv[]) {
     // Generate key set
     const int modulobits = 128;
-    const num1 = 4973;
-    const num2 = 2879;
+    const unsigned long num1 = 4973;
+    const unsigned long num2 = 2879;
     
     paillier_pubkey_t* pub;
     paillier_prvkey_t* prv;
@@ -26,8 +26,8 @@ int main(int argc, char* argv[]) {
     // Create plaintexts
     paillier_plaintext_t *pt1 = paillier_plaintext_from_ui(num1);
     paillier_plaintext_t *pt2 = paillier_plaintext_from_ui(num2);
-    printf("pt1 = %d\n", mpz_get_ui(pt1->m));
-    printf("pt2 = %d\n", mpz_get_ui(pt2->m));
+    printf("pt1 = %lu\n", mpz_get_ui(pt1->m));
+    printf("pt2 = %lu\n", mpz_get_ui(pt2->m));
 
     // Encrypt plaintexts
     paillier_ciphertext_t *ct1 = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
