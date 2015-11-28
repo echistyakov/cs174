@@ -14,8 +14,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    paillier_prvkey_t* prv;
     paillier_pubkey_t* pub;
+    paillier_prvkey_t* prv;
     paillier_plaintext_t* pt;
     paillier_ciphertext_t* ct;
     
