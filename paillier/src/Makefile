@@ -1,7 +1,7 @@
-CC		= gcc
-CXX		= g++
+CC      = gcc
+CXX     = g++
 CFLAGS  = -w
-LIBS    = -lgmp -lpaillier
+LIBS    = -lpaillier -lgmp
 TARGETS = key_factory encrypt decrypt sum_he.so
 
 all: $(TARGETS)
