@@ -60,7 +60,7 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error);
 ////////////////
 
 // TODO: should be placed in a separate file
-const char *PUB_HEX = "2180d9c9587bacf003394ca9a235e43c";
+const char *PUB_HEX = "eece2bb7c56a58313bc022039a1184ad";
 
 /////////////
 // HELPERS //
@@ -70,7 +70,6 @@ const char *PUB_HEX = "2180d9c9587bacf003394ca9a235e43c";
 typedef struct {
     paillier_pubkey_t *pub;
     paillier_ciphertext_t *sum;
-    paillier_ciphertext_t *zero;
 } sum_he_t;
 
 void sum_he_t_init(sum_he_t *sh) {
@@ -78,14 +77,11 @@ void sum_he_t_init(sum_he_t *sh) {
     sh->pub = paillier_pubkey_from_hex(PUB_HEX);
     // Set sum to 0
     sh->sum = paillier_ciphertext_zero(sh->pub);
-    // Set zero to 0
-    sh->zero = paillier_ciphertext_zero(sh->pub);
 }
 
 void sum_he_t_free(sum_he_t *sh) {
     paillier_freepubkey(sh->pub);
     paillier_freeciphertext(sh->sum);
-    paillier_freeciphertext(sh->zero);
     free(sh);
 }
 
@@ -110,6 +106,10 @@ my_bool sum_he_init(UDF_INIT *initid, UDF_ARGS *args, char *message) {
         strcpy(message, "Couldn't allocate memory");
         return 1;
     }
+    
+    // TODO:
+    initid->maybe_null = 1;
+    initid->max_length = 128;
 
     return 0;
 }
@@ -122,15 +122,20 @@ void sum_he_deinit(UDF_INIT *initid) {
 void sum_he_clear(UDF_INIT *initid, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
     // Set sum to 0
-    mpz_set(sh->sum->c, sh->zero->c);
+    paillier_freeciphertext(sh->sum);
+    sh->sum = paillier_ciphertext_zero(sh->pub);
 }
 
 void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
     
+    // Extract hex value from args
+    char *hex_value = (char *) malloc(sizeof(char) * args->lengths[0]);
+    memcpy(hex_value, args->args[0], args->lengths[0]);
+
     // Convert arg to ciphertext
     paillier_ciphertext_t *ct = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
-    mpz_init_set_str(ct->c, (char *) args->args[0], 16);
+    mpz_init_set_str(ct->c, hex_value, 16);
     
     // Multiply
     paillier_ciphertext_t *mul = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
@@ -140,6 +145,8 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     paillier_freeciphertext(ct);
     sh->sum = mul;
     
+    free(hex_value);
+
     // TODO: handle NULLs
 }
 
@@ -153,6 +160,7 @@ char* sum_he(UDF_INIT *initid, UDF_ARGS *args, char *result, unsigned long *leng
     char *hex_result = mpz_get_str(NULL, 16, sh->sum->c);
     strcpy(result, hex_result);
     *length = strlen(hex_result);
+    free(hex_result);
     return result;
 }
 
