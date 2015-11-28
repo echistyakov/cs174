@@ -132,7 +132,7 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     // Extract hex value from args
     char *hex_value = (char *) malloc(sizeof(char) * (args->lengths[0] + 1));
     memcpy(hex_value, args->args[0], args->lengths[0]);
-    hex_value[args->args[0]] = 0;
+    hex_value[args->lengths[0]] = 0;
 
     // Convert arg to ciphertext
     paillier_ciphertext_t *ct = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
