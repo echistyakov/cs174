@@ -130,13 +130,14 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     sum_he_t *sh = (sum_he_t *) initid->ptr;
     
     // Extract hex value from args
-    char *hex_value = (char *) malloc(sizeof(char) * args->lengths[0]);
+    char *hex_value = (char *) malloc(sizeof(char) * (args->lengths[0] + 1));
     memcpy(hex_value, args->args[0], args->lengths[0]);
+    hex_value[args->args[0]] = 0;
 
     // Convert arg to ciphertext
     paillier_ciphertext_t *ct = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
     mpz_init_set_str(ct->c, hex_value, 16);
-    
+
     // Multiply
     paillier_ciphertext_t *mul = (paillier_ciphertext_t *) malloc(sizeof(paillier_ciphertext_t));
     mpz_init(mul->c);
@@ -144,7 +145,7 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error) {
     paillier_freeciphertext(sh->sum);
     paillier_freeciphertext(ct);
     sh->sum = mul;
-    
+
     free(hex_value);
 
     // TODO: handle NULLs
