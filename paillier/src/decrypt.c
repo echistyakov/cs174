@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     pt = paillier_dec(NULL, pub, prv, ct);
     
     // Print out plain text
-    printf("%d", mpz_get_ui(pt->m));
+    printf("%d\n", mpz_get_ui(pt->m));
     
     // Clean up
     paillier_freepubkey(pub);

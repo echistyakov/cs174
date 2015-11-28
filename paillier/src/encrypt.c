@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     ct = paillier_enc(NULL, pub, pt, paillier_get_rand);
 
     // Print out ciphertext
-    printf("%s", mpz_get_str(NULL, 16, ct->c));
+    printf("%s\n", mpz_get_str(NULL, 16, ct->c));
     
     // Clean up
     paillier_freepubkey(pub);
