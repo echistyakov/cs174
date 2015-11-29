@@ -4,14 +4,20 @@
 #include <paillier.h>
 #include "paillier_helpers.h"
 
-const int MODULO_BITS = 128;
-
 
 int main(int argc, char* argv[]) {
+    // Arguments:
+    // [1] modulus bits
+    if (argc != 2) {
+        printf("Usage: %s <modulus bits>\n", argv[0]);
+        return 1;
+    }
+    int modulus_bits = atoi(argv[1]);
+    
     // Generate key set
     paillier_pubkey_t* pub;
     paillier_prvkey_t* prv;
-    paillier_keygen(MODULO_BITS, &pub, &prv, paillier_get_rand);
+    paillier_keygen(modulus_bits, &pub, &prv, paillier_get_rand);
     
     // Obtain hex strings from key set
     char *pub_hex = paillier_pubkey_to_hex(pub);
