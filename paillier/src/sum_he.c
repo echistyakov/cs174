@@ -91,15 +91,15 @@ void sum_he_t_free(sum_he_t *sh) {
 // HELPERS //
 /////////////
 
-bool is_hex_string(char *str) {
+int is_hex_string(char *str) {
     int i = 0;
     while (str[i]) {
         if (!isxdigit(str[i])) {
-            return false;
+            return 0;  // false
         }
         i += 1;
     }
-    return true;
+    return 1;  // true
 }
 
 ////////////////////
