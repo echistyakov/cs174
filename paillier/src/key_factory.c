@@ -14,6 +14,12 @@ int main(int argc, char* argv[]) {
     }
     int modulus_bits = atoi(argv[1]);
     
+    // Check if modulus_bits is a power of two
+    if (x <= 0 || (x & (x - 1))) {
+        printf("Error: modulus bits must be a power of 2\n");
+        return 1;
+    }
+    
     // Generate key set
     paillier_pubkey_t* pub;
     paillier_prvkey_t* prv;

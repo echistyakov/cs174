@@ -12,3 +12,14 @@ void paillier_get_rand(void* buf, int len) {
         c[i] = rand() % 256;
     }
 }
+
+int is_hex_string(char *str) {
+    int i = 0;
+    while (str[i]) {
+        if (!isxdigit(str[i])) {
+            return 0;  // false
+        }
+        i += 1;
+    }
+    return 1;  // true
+}

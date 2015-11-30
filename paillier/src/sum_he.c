@@ -60,7 +60,7 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error);
 ////////////////
 
 // TODO: should be placed in a separate file
-const char *PUB_HEX = "eece2bb7c56a58313bc022039a1184ad";
+const char *PUB_HEX = "b0a0a05fc90ed599";
 
 ///////////////////
 // SUM_HE STRUCT //
@@ -85,21 +85,6 @@ void sum_he_t_free(sum_he_t *sh) {
     paillier_freepubkey(sh->pub);
     paillier_freeciphertext(sh->sum);
     free(sh);
-}
-
-/////////////
-// HELPERS //
-/////////////
-
-int is_hex_string(char *str) {
-    int i = 0;
-    while (str[i]) {
-        if (!isxdigit(str[i])) {
-            return 0;  // false
-        }
-        i += 1;
-    }
-    return 1;  // true
 }
 
 ////////////////////
