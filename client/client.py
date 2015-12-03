@@ -44,7 +44,7 @@ def encrypt(plain_text):
 
 def execute(query, commit=False):
     try:
-        # print("Executing: {}".format(query))
+        # print('Executing: {}'.format(query))
         cursor.execute(query)
         if commit:
             cnx.commit()
@@ -55,7 +55,6 @@ def execute(query, commit=False):
 
 
 def run():
-
     while True:
         print()  # Empty line
         input = raw_input('>> ').strip(' ;')
@@ -104,7 +103,7 @@ def run():
                 print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
 
         elif first_token == 'SELECT' and second_token == 'AVG':
-            if re.search("GROUP\s+BY", input.upper()):
+            if re.search('GROUP\s+BY', input.upper()):
                 select_query = 'SELECT age, SUM_HE(salary) AS sum_he, COUNT(*) AS num FROM Employees'
             else:
                 select_query = 'SELECT SUM_HE(salary) AS sum_he, COUNT(*) AS num FROM Employees'
@@ -150,8 +149,6 @@ def run():
                     print(tabulate([row_dict], headers='keys', tablefmt='psql'))
                 elif len(rows) == 0:
                     print('No matching rows were found!')
-                else:
-                    print('More than one row were found!')
 
         else:
             print('Usage Error: Invalid Query')
@@ -161,7 +158,7 @@ def run():
 if __name__ == '__main__':
     # Usage
     if len(sys.argv) != 3:
-        print("Usage: {} <pub> <prv>\n".format(sys.argv[0]))
+        print('Usage: {} <pub> <prv>'.format(sys.argv[0]))
         sys.exit(1)
 
     # Set keys
