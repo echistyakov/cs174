@@ -51,7 +51,6 @@ def main(pub_key, prv_key):
         sys.exit(1)
 
     while(True):
-	print("TEST")
         input = raw_input(">> ").strip()
 
         if input == 'exit':
@@ -65,25 +64,26 @@ def main(pub_key, prv_key):
                 continue
             # encrypt
             tokens[3] = encrypt(tokens[3], pub_key)
-            insert_query = 'INSERT INTO Employees VALUES ({}, {}, {});'
+            insert_query = "INSERT INTO Employees VALUES ({}, {}, '{}');"
             formatted_query = insert_query.format(tokens[1], tokens[2], tokens[3])
             error = execute(cursor, formatted_query)
             if error:
                 print("ERROR {}\n".format(error))
             else:
                 print("Success\n")
+                cnx.commit()
         elif tokens[0].lower() == 'select':
             if tokens[1].lower() == 'sum':
                 select_query = 'SELECT SUM_HE(salary) AS sum FROM Employees '
                 if re.search("group\s+by", input.lower()):
                     select_query = 'SELECT SUM_HE(salary) AS sum, age FROM Employees '
                 # Re-join tokens excluding SELECT SUM
-                select_query + " ".join(tokens[2:]) + ';'
-                error = execute(cursor, select_query)
+                formatted_query = select_query + " ".join(tokens[2:]) + ';'
+                error = execute(cursor, formatted_query)
                 if error:
                     print("ERROR {}".format(error))
                 else:
-                    row_list = None
+                    row_list = list()
                     for row in cursor.fetchall():
                         row_dict = dict(zip(cursor.column_names, row))
                         row_dict['sum'] = decrypt(row_dict['sum'], pub_key, prv_key)
@@ -94,19 +94,19 @@ def main(pub_key, prv_key):
                 if re.search("group\s+by", input.lower()):
                     select_query = 'SELECT SUM_HE(salary) AS sum, COUNT(*) AS num, age FROM Employees '
                 # Re-join tokens excluding SELECT SUM
-                select_query + " ".join(tokens[2:]) + ';'
-                error = execute(cursor, select_query)
+                formatted_query = select_query + " ".join(tokens[2:]) + ';'
+                error = execute(cursor, formatted_query)
                 if error:
                     print("ERROR {}".format(error))
                 else:
-                    row_list = None
+                    row_list = list()
                     headers = list(cursor.column_names)
                     headers.remove('sum')
                     headers.remove('num')
                     for row in cursor.fetchall():
                         row_dict = dict(zip(cursor.column_names, row))
                         row_dict['sum'] = decrypt(row_dict['sum'], pub_key, prv_key)
-                        row_dict['avg'] = row_dict['sum'] / row_dict['num']
+                        row_dict['avg'] = int(row_dict['sum']) / row_dict['num']
                         row_dict.pop('sum')
                         row_dict.pop('num')
                         row_list.append(row_dict.values())
@@ -117,12 +117,12 @@ def main(pub_key, prv_key):
                 if error:
                     print("ERROR {}".format(error))
                 else:
-                    row_list = None
+                    row_list = list()
                     for row in cursor.fetchall():
                         row_dict = dict(zip(cursor.column_names, row))
                         row_dict['salary'] = decrypt(row_dict['salary'], pub_key, prv_key)
-                        row_list.append(row_dict.values())
-                    print(tabulate(row_list, cursor.column_names,tablefmt="psql"))
+                        row_list.append(row_dict)
+                    print(tabulate(row_list, headers="keys",tablefmt="psql"))
             elif len(tokens) == 2:
                 select_query = 'SELECT * FROM Employees WHERE id = {};'
                 formatted_query = select_query.format(tokens[1])
