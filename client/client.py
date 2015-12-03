@@ -87,9 +87,9 @@ def run():
 
         elif first_token == 'SELECT' and second_token == 'SUM':
             if re.search('GROUP\s+BY', input.upper()):
-                select_query = 'SELECT age, SUM_HE(salary) AS sum_he FROM Employees'
+                select_query = 'SELECT age, SUM_HE(salary) AS sum FROM Employees'
             else:
-                select_query = 'SELECT SUM_HE(salary) AS sum_he FROM Employees'
+                select_query = 'SELECT SUM_HE(salary) AS sum FROM Employees'
 
             # Re-join tokens excluding SELECT SUM
             query = select_query + ' ' + ' '.join(tokens[2:]) + ';'
@@ -98,15 +98,20 @@ def run():
                 row_list = list()
                 for row in cursor.fetchall():
                     row_dict = OrderedDict(zip(cursor.column_names, row))
-                    row_dict['sum_he'] = decrypt(row_dict['sum_he'])
-                    row_list.append(row_dict.values())
-                print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
+                    if row_dict['sum'] is not None:
+                        row_dict['sum'] = decrypt(row_dict['sum'])
+                        row_list.append(row_dict.values())
+
+                if row_list:
+                    print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
+                else:
+                    print('No matching rows were found!')
 
         elif first_token == 'SELECT' and second_token == 'AVG':
             if re.search('GROUP\s+BY', input.upper()):
-                select_query = 'SELECT age, SUM_HE(salary) AS sum_he, COUNT(*) AS num FROM Employees'
+                select_query = 'SELECT age, SUM_HE(salary) AS sum, COUNT(*) AS num FROM Employees'
             else:
-                select_query = 'SELECT SUM_HE(salary) AS sum_he, COUNT(*) AS num FROM Employees'
+                select_query = 'SELECT SUM_HE(salary) AS sum, COUNT(*) AS num FROM Employees'
 
             # Re-join tokens excluding SELECT AVG
             query = select_query + ' ' + ' '.join(tokens[2:]) + ';'
@@ -114,17 +119,22 @@ def run():
             if success:
                 row_list = list()
                 headers = list(cursor.column_names)
-                headers.remove('sum_he')
+                headers.remove('sum')
                 headers.remove('num')
                 headers.append('avg')
                 for row in cursor.fetchall():
                     row_dict = OrderedDict(zip(cursor.column_names, row))
-                    row_dict['sum_he'] = decrypt(row_dict['sum_he'])
-                    row_dict['avg'] = int(row_dict['sum_he']) / row_dict['num']
-                    row_dict.pop('sum_he')
+                    if row_dict['num'] != 0:
+                        row_dict['sum'] = decrypt(row_dict['sum'])
+                        row_dict['avg'] = int(row_dict['sum']) / row_dict['num']
+                    row_dict.pop('sum')
                     row_dict.pop('num')
                     row_list.append(row_dict.values())
-                print(tabulate(row_list, headers, tablefmt='psql'))
+
+                if row_list:
+                    print(tabulate(row_list, headers, tablefmt='psql'))
+                else:
+                    print('No matching rows were found!')
 
         elif first_token == 'SELECT' and second_token == '*':
             query = 'SELECT * FROM Employees;'
