@@ -1,7 +1,7 @@
 # CS 174 Final Project
 Eric Swenson, Evgeny Chistyakov
 
-### System setup
+### System Setup
 1. Install MySQL:
    * `sudo apt-get install mysql-server` (MySQL server)
    * `sudo apt-get install libmysqlclient-dev` (MySQL header files)
@@ -31,3 +31,10 @@ Eric Swenson, Evgeny Chistyakov
 9. Register **SUM_HE** with MySQL:
    * `CREATE AGGREGATE FUNCTION sum_he RETURNS STRING SONAME 'sum_he.so';`
    * To deregister: `DROP FUNCTION sum_he;`
+
+### Client Setup
+1. Install the following:
+   * `sudo apt-get install python-pip`
+   * `sudo apt-get install python-dev`
+   * `sudo pip install mysql-connector-python --allow-external mysql-connector-python`
+   * `sudo pip install tabulate`
