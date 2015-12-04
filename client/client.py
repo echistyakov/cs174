@@ -127,9 +127,9 @@ def run():
                     if row_dict['num'] != 0:
                         row_dict['sum'] = decrypt(row_dict['sum'])
                         row_dict['avg'] = int(row_dict['sum']) / row_dict['num']
-                    row_dict.pop('sum')
-                    row_dict.pop('num')
-                    row_list.append(row_dict.values())
+                        row_dict.pop('sum')
+                        row_dict.pop('num')
+                        row_list.append(row_dict.values())
 
                 if row_list:
                     print(tabulate(row_list, headers, tablefmt='psql'))
@@ -145,20 +145,24 @@ def run():
                     row_dict = OrderedDict(zip(cursor.column_names, row))
                     row_dict['salary'] = decrypt(row_dict['salary'])
                     row_list.append(row_dict.values())
-                print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
+
+                if row_list:
+                    print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
+                else:
+                    print('No rows were found!')
 
         elif first_token == 'SELECT' and len(tokens) == 2:
             query_template = 'SELECT * FROM Employees WHERE id = {};'
             query = query_template.format(tokens[1])
             success = execute(query)
             if success:
-                rows = cursor.fetchall()
-                if len(rows) == 1:
-                    row_dict = OrderedDict(zip(cursor.column_names, rows[0]))
+                row = cursor.fetchone()
+                if row:
+                    row_dict = OrderedDict(zip(cursor.column_names, row))
                     row_dict['salary'] = decrypt(row_dict['salary'])
                     print(tabulate([row_dict], headers='keys', tablefmt='psql'))
-                elif len(rows) == 0:
-                    print('No matching rows were found!')
+                else:
+                    print('No matching row was found!')
 
         else:
             print('Usage Error: Invalid Query')
