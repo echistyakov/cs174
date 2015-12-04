@@ -14,7 +14,9 @@ config = {
     'password': 'test',
     'host': '127.0.0.1',
     'port': '3306',  # Default MySQL port
-    'database': 'project'
+    'database': 'project',
+    'autocommit': True,
+    'buffered': True
 }
 
 pub_key = None
@@ -42,12 +44,10 @@ def encrypt(plain_text):
     return _exec_bin(args)
 
 
-def execute(query, commit=False):
+def execute(query):
     try:
         # print('Executing: {}'.format(query))
         cursor.execute(query)
-        if commit:
-            cnx.commit()
         return True
     except mysql.connector.Error as err:
         print('MySQL Error: {}'.format(err))
@@ -81,7 +81,7 @@ def run():
             tokens[3] = encrypt(tokens[3])
             query_template = "INSERT INTO Employees VALUES ({}, {}, '{}');"
             query = query_template.format(*tokens[1:])
-            success = execute(query, commit=True)
+            success = execute(query)
             if success:
                 print('Insert Successful')
 
