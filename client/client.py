@@ -9,6 +9,7 @@ import mysql.connector
 from tabulate import tabulate
 
 
+# MySQL connection config
 config = {
     'user': 'test',
     'password': 'test',
@@ -19,9 +20,11 @@ config = {
     'buffered': True
 }
 
+# Key set
 pub_key = None
 prv_key = None
 
+# MySQL connection and cursor
 cnx = None
 cursor = None
 
@@ -44,13 +47,23 @@ def encrypt(plain_text):
     return _exec_bin(args)
 
 
+def fetchone():
+    row = cursor.fetchone()
+    return OrderedDict(zip(cursor.column_names, row)) if row else row
+
+
+def fetchall():
+    rows = cursor.fetchall()
+    return [OrderedDict(zip(cursor.column_names, row)) for row in rows]
+
+
 def execute(query):
     try:
         # print('Executing: {}'.format(query))
         cursor.execute(query)
         return True
-    except mysql.connector.Error as err:
-        print('MySQL Error: {}'.format(err))
+    except mysql.connector.Error as e:
+        print('MySQL Error: {}'.format(e))
         return False
 
 
@@ -95,15 +108,13 @@ def run():
             query = select_query + ' ' + ' '.join(tokens[2:]) + ';'
             success = execute(query)
             if success:
-                row_list = list()
-                for row in cursor.fetchall():
-                    row_dict = OrderedDict(zip(cursor.column_names, row))
-                    if row_dict['sum'] is not None:
-                        row_dict['sum'] = decrypt(row_dict['sum'])
-                        row_list.append(row_dict.values())
+                row_list = fetchall()
+                for row in row_list:
+                    if row['sum'] is not None:
+                        row['sum'] = decrypt(row['sum'])
 
                 if row_list:
-                    print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
+                    print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
                     print('No matching rows were found!')
 
@@ -117,22 +128,16 @@ def run():
             query = select_query + ' ' + ' '.join(tokens[2:]) + ';'
             success = execute(query)
             if success:
-                row_list = list()
-                headers = list(cursor.column_names)
-                headers.remove('sum')
-                headers.remove('num')
-                headers.append('avg')
-                for row in cursor.fetchall():
-                    row_dict = OrderedDict(zip(cursor.column_names, row))
-                    if row_dict['num'] != 0:
-                        row_dict['sum'] = decrypt(row_dict['sum'])
-                        row_dict['avg'] = int(row_dict['sum']) / row_dict['num']
-                        row_dict.pop('sum')
-                        row_dict.pop('num')
-                        row_list.append(row_dict.values())
+                row_list = fetchall()
+                for row in row_list:
+                    if row['num'] != 0:
+                        row['sum'] = decrypt(row['sum'])
+                        row['avg'] = int(row['sum']) / row['num']
+                        row.pop('sum')
+                        row.pop('num')
 
                 if row_list:
-                    print(tabulate(row_list, headers, tablefmt='psql'))
+                    print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
                     print('No matching rows were found!')
 
@@ -140,14 +145,12 @@ def run():
             query = 'SELECT * FROM Employees;'
             success = execute(query)
             if success:
-                row_list = list()
-                for row in cursor.fetchall():
-                    row_dict = OrderedDict(zip(cursor.column_names, row))
-                    row_dict['salary'] = decrypt(row_dict['salary'])
-                    row_list.append(row_dict.values())
+                row_list = fetchall()
+                for row in row_list:
+                    row['salary'] = decrypt(row['salary'])
 
                 if row_list:
-                    print(tabulate(row_list, cursor.column_names, tablefmt='psql'))
+                    print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
                     print('No rows were found!')
 
@@ -156,11 +159,10 @@ def run():
             query = query_template.format(tokens[1])
             success = execute(query)
             if success:
-                row = cursor.fetchone()
+                row = fetchone()
                 if row:
-                    row_dict = OrderedDict(zip(cursor.column_names, row))
-                    row_dict['salary'] = decrypt(row_dict['salary'])
-                    print(tabulate([row_dict], headers='keys', tablefmt='psql'))
+                    row['salary'] = decrypt(row['salary'])
+                    print(tabulate([row], headers='keys', tablefmt='psql'))
                 else:
                     print('No matching row was found!')
 
@@ -179,7 +181,7 @@ if __name__ == '__main__':
     pub_key = sys.argv[1]
     prv_key = sys.argv[2]
 
-    # Establish connection with the MySQL server
+    # Establish connection with MySQL server
     try:
         cnx = mysql.connector.connect(**config)
         cursor = cnx.cursor()
@@ -187,7 +189,7 @@ if __name__ == '__main__':
         print('Connection Error: {}'.format(err))
         sys.exit(1)
 
-    # We don't care if the following fails - 'finally' will execute no matter what
+    # Execute 'finally' no matter what happens inside 'run()'
     try:
         run()
     finally:
