@@ -111,8 +111,12 @@ def run():
                 row_list = fetchall()
                 for row in row_list:
                     if row['sum'] is not None:
-                        row['sum'] = decrypt(row['sum'])
-
+                        row['salary_sum'] = decrypt(row['sum'])
+			row.pop('sum')
+		    else:
+                    	row_list = None
+			break
+						
                 if row_list:
                     print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
@@ -132,9 +136,12 @@ def run():
                 for row in row_list:
                     if row['num'] != 0:
                         row['sum'] = decrypt(row['sum'])
-                        row['avg'] = int(row['sum']) / row['num']
+                        row['avg_salary'] = int(row['sum']) / row['num']
                         row.pop('sum')
                         row.pop('num')
+		    else:
+                    	row_list = None
+			break
 
                 if row_list:
                     print(tabulate(row_list, headers='keys', tablefmt='psql'))
@@ -152,7 +159,7 @@ def run():
                 if row_list:
                     print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
-                    print('No rows were found!')
+                    print('No matching rows were found!')
 
         elif first_token == 'SELECT' and len(tokens) == 2:
             query_template = 'SELECT * FROM Employees WHERE id = {};'
@@ -164,7 +171,7 @@ def run():
                     row['salary'] = decrypt(row['salary'])
                     print(tabulate([row], headers='keys', tablefmt='psql'))
                 else:
-                    print('No matching row was found!')
+                    print('No matching rows were found!')
 
         else:
             print('Usage Error: Invalid Query')
