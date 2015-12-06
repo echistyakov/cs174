@@ -109,15 +109,13 @@ def run():
             success = execute(query)
             if success:
                 row_list = fetchall()
+                list_empty = True
                 for row in row_list:
                     if row['sum'] is not None:
-                        row['salary_sum'] = decrypt(row['sum'])
-			row.pop('sum')
-		    else:
-                    	row_list = None
-			break
-						
-                if row_list:
+                        row['sum'] = decrypt(row['sum'])
+                        list_empty = False
+
+                if not list_empty:
                     print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
                     print('No matching rows were found!')
@@ -133,17 +131,16 @@ def run():
             success = execute(query)
             if success:
                 row_list = fetchall()
+                list_empty = True
                 for row in row_list:
                     if row['num'] != 0:
                         row['sum'] = decrypt(row['sum'])
-                        row['avg_salary'] = int(row['sum']) / row['num']
+                        row['avg'] = int(row['sum']) / row['num']
                         row.pop('sum')
                         row.pop('num')
-		    else:
-                    	row_list = None
-			break
+                        list_empty = False
 
-                if row_list:
+                if not list_empty:
                     print(tabulate(row_list, headers='keys', tablefmt='psql'))
                 else:
                     print('No matching rows were found!')
