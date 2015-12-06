@@ -11,8 +11,8 @@ from tabulate import tabulate
 
 # MySQL connection config
 config = {
-    'user': 'test',
-    'password': 'test',
+    'user': 'root',
+    'password': 'cs174$',
     'host': '127.0.0.1',
     'port': '3306',  # Default MySQL port
     'database': 'project',
