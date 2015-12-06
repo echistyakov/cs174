@@ -45,4 +45,4 @@ Eric Swenson, Evgeny Chistyakov
    * `cp encrypt ../../client`
    * `cp decrypt ../../client`
 3. Launch the client:
-   * `python client.py <pub> <prv>`
+   * `python client.py cc0b753172e2f753226965e9bb85d4f3 6605ba98b9717ba8ac482a7be12840a8` (public key is hardcoded into **sum_he.so**)
