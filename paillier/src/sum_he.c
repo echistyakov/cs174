@@ -59,7 +59,7 @@ void sum_he_add(UDF_INIT *initid, UDF_ARGS *args, char *is_null, char *error);
 // PUBLIC KEY //
 ////////////////
 
-const char *PUB_HEX = "b0a0a05fc90ed599";
+const char *PUB_HEX = "cc0b753172e2f753226965e9bb85d4f3";
 
 ///////////////////
 // SUM_HE STRUCT //

@@ -7,6 +7,7 @@ Eric Swenson, Evgeny Chistyakov
    * `sudo apt-get install libmysqlclient-dev` (MySQL header files)
    * `sudo apt-get install m4` (**gmp** library dependens on it)
    * `sudo apt-get install make` (needed for compilation)
+   * `sudo apt-get install gcc` (needed for compilation)
 2. Download/clone this repo
 3. Extract the libraries (*paillier/libs*)
    * `tar xvfz libpaillier-0.8.tar.gz`
@@ -27,14 +28,19 @@ Eric Swenson, Evgeny Chistyakov
    * `make`
    * Output binaries are: **encrypt**, **decrypt**, **key_factory**, **sum_he.so**
 7. Copy **sum_he.so** to MySQL plugins folder:
-   * `cp sum_he.so /usr/lib/mysql/plugin` (may require `sudo` mode)
+   * `sudo cp sum_he.so /usr/lib/mysql/plugin`
+8. Copy **encrypt** and **decrypt** binaries into the **/client** folder:
+   * `cp encrypt ../../client`
+   * `cp decrypt ../../client`
 8. Register **SUM_HE** with MySQL:
    * `CREATE AGGREGATE FUNCTION sum_he RETURNS STRING SONAME 'sum_he.so';`
    * To deregister: `DROP FUNCTION sum_he;`
 
 ### Client Setup
-1. Install the following:
+1. Install required packages:
    * `sudo apt-get install python-pip`
    * `sudo apt-get install python-dev`
    * `sudo pip install mysql-connector-python --allow-external mysql-connector-python`
    * `sudo pip install tabulate`
+2. Launch the client:
+   * `python client.py <pub> <prv>`
